@@ -1,0 +1,491 @@
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+@import url('https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700,700i&subset=cyrillic');
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i&subset=cyrillic');
+@import url('https://fonts.googleapis.com/css?family=Old+Standard+TT:400,400i,700&subset=cyrillic');
+@import url('https://fonts.googleapis.com/css?family=Merriweather:400,400i,700,700i&subset=cyrillic');
+@import url('https://fonts.googleapis.com/css?family=Cormorant+Garamond:400,400i,700,700i&subset=cyrillic');
+@import url('https://fonts.googleapis.com/css?family=Lobster&subset=cyrillic');
+@import url('https://fonts.googleapis.com/css?family=Fira+Sans:400,400i,700,700i&subset=cyrillic');
+
+@import "sidebar.css"; /* ------- 1. Сайдбар ------- */
+@import "ui.css";
+@import "thumbs.css";
+@import "browser.css"; /* ------- 4. Браузер ------- */
+
+body {
+    margin: 0;
+    height: 100vh;
+    padding-left: 60px;
+    font-family: 'Arial';
+}
+
+iframe {
+    border: none;
+}
+
+*[draggable="true"] {
+    cursor: move;
+}
+
+a {
+    color: #999999;
+    text-decoration: none;
+}
+
+a:hover {
+    color: orange;
+    cursor: pointer;
+}
+
+#pinboard {
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+#editor {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-width: 570px;
+    height: 100%;
+    background: #f5f5f5;
+    overflow: hidden;
+    box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.1);
+}
+
+#help {
+    display: none;
+    position: fixed;
+    /* z-index: 30000; */
+    top: 50px;
+    left: 500px;
+    width: 300px;
+    height: 400px;
+    overflow: auto;
+    resize: both;
+    font-size: 14px;
+}
+
+#help:after {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    /* content: "↘"; */
+    content: attr(data-content);
+    visibility: visible;
+    width: 20px; height: 20px;
+    /* border-bottom: 10px solid rgba(205, 229, 225, 0.3); */
+    /* border-left: 10px solid transparent; */
+}
+
+#help h4 {
+    position: relative; 
+    color: #ffffff;
+    background: #00BFFF;
+    margin: 0;
+    padding: 10px 20px;
+    cursor: move;
+    user-select: none;
+    -moz-user-select: none;
+}
+
+/* ------- 2. Шапка ------- */
+
+#header {
+    padding: 10px;
+    border-bottom: 1px solid #e6e6e6;
+    background: white;
+    font-size: 14px;
+    user-select: none;
+    -moz-user-select: none;
+}
+
+#header span {
+    font-weight: bold;
+}
+
+#header * {
+    margin-right: 25px;
+}
+
+.panel {
+    position: absolute;
+    z-index: 20000;
+    /* padding: 20px; */
+    background: white;
+    box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.1);
+}
+
+#exitMenu {
+    top: 30px;
+    left: 200px;
+    display: none;
+}
+
+#exitMenu p {
+    padding: 10px 25px 20px;
+    border-bottom: 1px solid #f5f5f5;
+}
+
+#exitMenu p:last-child {
+    border-bottom: none;
+    padding: 10px 25px;
+}
+
+/* ------- 3. Панель доски ------- */
+
+#boardbar {
+    padding: 10px;
+    border-bottom: 1px solid #e6e6e6;
+    background: white;
+    font-size: 14px;
+    user-select: none;
+    -moz-user-select: none;
+}
+
+#boardbar > * {
+    margin-right: 25px;
+}
+
+#boardbar > a > div {
+    display: inline;
+}
+
+#boardbar span {
+    float: right;
+}
+
+#boardbar span * {
+    margin: 0 20px;
+}
+
+#preview {
+    overflow: hidden;
+    position: relative;
+    padding: 10px;
+    height: 100%;
+	user-select: none;
+    -moz-user-select: none;
+    /* cursor: url('./cursors/grab.png'), auto; */
+}
+
+#canvasbar {
+    position: fixed;
+    z-index: 10000;
+    top: 150px;
+    left: 80px;
+    width: 40px;
+    height: 160px;
+    background: white;
+    box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.1);
+    user-select: none;
+    -moz-user-select: none;
+}
+
+#canvasbarheader {
+    position: absolute;
+    top: -10px;
+    color: white;
+    width: 100%;
+    height: 10px;
+    background: #00BFFF;
+    cursor: move;
+    padding: 0px 0px;
+    margin: 0;
+}
+
+#canvasbar i {
+    padding: 8px;
+}
+
+#canvasbar.sticky {
+    position: fixed;
+    top: 99px;
+    left: 80px;
+}
+
+#pinbar {
+    display: none;
+    z-index: 10000;
+    position: fixed;
+    flex-direction: column;
+    top: 100px;
+    left: 300px;
+    font-size: 12px;
+    color: #999999;
+    background: white;
+    box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.1);
+    user-select: none;
+    -moz-user-select: none;
+}
+
+
+#pinbar div:nth-child(2) {
+    border-bottom: 1px solid #e6e6e6;
+    padding: 10px;
+}
+
+#pinbar a {
+    margin: 0 10px;
+}
+
+
+
+#pinbar .options {
+    display: flex;
+    align-items: center;
+    padding: 5px 20px;
+}
+
+#pinbarheader {
+    position: absolute;
+    top: -10px;
+    color: white;
+    width: 100%;
+    height: 10px;
+    background: #00BFFF;
+    cursor: move;
+    padding: 0px 0px;
+    margin: 0;
+}
+
+
+#pinbar input {
+    margin: 2px 15px;
+}
+
+#pinbar.sticky {
+    position: fixed;
+    top: 99px;
+    left: 140px;
+}
+
+#textOptions {
+    display: none;
+    border-top: 1px solid #e6e6e6;
+    font-size: 16px;
+}
+
+#textOptions p {
+    margin: 10px 0;
+}
+
+#textOptions > input {
+    margin: 0;
+    padding: 0;
+    /* background: #666; */
+    /* border: 1px solid #ccc; */
+    /* border: none; */
+}
+
+#textOptions [type="checkbox"] {
+    margin-right: 5px;
+    margin-left: 0;
+}
+
+#textOptions label {
+    margin-right: 15px;
+}
+
+#textOptions [type="checkbox"]:hover  {
+    color: orange;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+}
+
+#textOptions label:hover {
+    color: orange;
+}
+
+#textOptionsSize {
+    width: 40px;
+}
+
+#textOptionsBoldLabel {
+    font-weight: bold;
+}
+
+#textOptionsItalicLabel {
+    font-style: italic;
+}
+
+#textOptionsUnderlineLabel {
+    text-decoration-line: underline;
+}
+
+#canvas {
+    transform: translate(0px, 0px);
+    transform-origin: 50% 50%;
+    /* transition: 0.1s; */
+}
+
+#board {
+    width: 1000px;
+    height: 800px;
+    background: white;
+    position: relative;
+    transition: 0.2s;
+}
+
+#board:after {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    content: "";
+    opacity: 0.9;
+    width: 180px;
+    height: 50px;
+    background: url("./images/label.png");
+    z-index: 6000;
+}
+
+#board.here {
+    outline: 3px solid #00BFFF;
+    opacity: 0.5;
+    background: rgba(0, 191, 255, 0.2); 
+    box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.2);
+}
+
+#board.ready {
+    animation: boardReady 1s infinite;
+    animation-fill-mode: forwards;
+}
+
+#board p {
+    display: block;
+    font-size: 30px;
+    margin: 0;
+    /* user-select: none;
+    -moz-user-select: none; */
+}
+
+#qstart {
+    margin-left: 120px;
+    margin-top: 40px;
+    width: 360px;
+}
+
+#label {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+
+.pin {
+    position: absolute;
+    /* opacity: 1; */
+    /* transform-origin: 0px 0px; */
+}
+
+.pin.hovered {
+    /* opacity: 0.8; */
+    outline: 1px solid #ccc;
+    cursor: move;
+}
+
+.pin.active {
+    /* opacity: 0.5; */
+    /* z-index: 5000; */
+}
+
+/* Modifiers */
+
+#pinModBox {
+    position: absolute;
+    border: 1px solid #ccc;
+    z-index: 10000;
+    cursor: move;
+    /* transform-origin: 0px 0px; */
+}
+
+#rotateMod {
+    position: absolute;
+    z-index: 50000;
+    top: -34px;
+    width: 18px;
+    height: 18px;
+    border: 1px solid #666;
+    border-radius: 12px;
+    background: #ccc;
+    cursor: url('cursors/rotate.cur'), e-resize;
+}
+
+#rotateMod:after {
+    z-index: 50000;
+    content: "|";
+    position: relative;
+    top: 15px;
+    left: 7px;
+    color: #ccc;
+    font-size: 15px;
+}
+
+.scMod {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    background: white;
+    border: 1px solid #666;
+}
+
+#scMod0 {
+	display: none;
+    top: -8px;
+    left: -8px;
+    cursor: nwse-resize;
+}
+
+#scMod1 {
+	display: none;
+    top: -8px;
+    left: 98%;
+    cursor: nesw-resize;
+}
+
+#scMod2 {
+    bottom: -8px;
+    left: 98%;
+    cursor: nwse-resize;
+}
+
+#scMod3 {
+	display: none;
+    bottom: -8px;
+    left: -8px;
+    cursor: nesw-resize;
+}
+
+#scMod4 {
+	display: none;
+    top: -8px;
+    left: 50%;
+    cursor: ns-resize;
+}
+
+#scMod5 {
+	display: none;
+    top: 35%;
+    left: 98%;
+    cursor: ew-resize;
+}
+
+#scMod6 {
+	display: none;
+    bottom: -8px;
+    left: 50%;
+    cursor: ns-resize;
+}
+
+#scMod7 {
+	display: none;
+    top: 40%;
+    left: -8px;
+    cursor: ew-resize;
+}
+
+/* Media */
+
+@media (max-width : 1020px) {
+    #boardbar > div {margin: 0 10px;}
+    #boardbar span a {margin: 0 10px;}
+}

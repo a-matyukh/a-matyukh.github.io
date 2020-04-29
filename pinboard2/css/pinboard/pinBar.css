@@ -1,0 +1,123 @@
+#pinBar {
+    display: block;
+    z-index: 4;
+    top: 0;
+    width: 100%;
+    height: calc(var(--cell)*2 + 2px);
+    visibility: visible;
+    box-shadow: var(--shadow);
+    transition: var(--curve);
+    user-select: none;
+}
+
+#pinBar.hidden {
+    visibility: hidden;
+    top: calc(0px - var(--cell)*2 - 10px);
+}
+
+#pinBar > div {
+    display: inline-block;
+    padding: 25px 20px;
+}
+
+#pinBar .dropdown-content > a {
+    display: block;
+}
+
+#commonOptions > div:first-of-type {
+    margin-right: 35px;
+}
+
+#commonOptions > div:last-child .dropdown-content > * {
+    display: block;
+}
+
+#commonOptions > div:last-child .dropdown-content > input {
+    padding: 10px;
+    margin: 5px 0 15px;
+}
+
+#commonOptions > div:last-child .dropdown-content > *:first-child {
+    margin-top: 10px;
+}
+
+#commonOptions input, #pin_distance {
+    padding: 0px;
+}
+
+#shapeOptionsColorBg, #textOptionsColorBg {
+    position: relative;
+    top: -2px;
+}
+
+#textOptions > div:first-of-type {
+    margin-right: 40px;
+}
+
+#textOptionsFamily {
+    margin-bottom: 10px;
+}
+
+#c_picker_block {
+    position: fixed;
+    z-index: 9999;
+    display: none;
+}
+
+#c_picker {
+    position: relative;
+    top: 25px;
+    left: 25px;
+    width: 40px;
+    height: 40px;
+    border-radius: 25px;
+    /* cursor: grab; */
+    background: white;
+    border: 5px solid white;
+    box-shadow: var(--big-shadow);
+}
+
+#colorpicker, #colorpicker2 {
+    margin: 10px 0;
+}
+
+.dropdown-content button:last-child {
+    display: none;
+}
+
+.color-shape {
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    padding: 0;
+}
+
+.color-value {
+    width: calc(var(--cell)*2 - 25px);
+    color: black;
+    padding: 10px;
+}
+
+#shapeOptions .dropdown-content > div:first-of-type, #textOptions .dropdown-content > div:first-of-type {
+    display: block;
+    margin: 0 auto;
+}
+
+#maskOptions {
+    display: none;
+}
+
+.mask_grid {
+    display: grid;
+    grid-template-columns: repeat(3, 40px);
+    grid-template-rows: repeat(3, 40px);
+    padding-top: 10px;
+}
+
+#groupOptions {
+    padding: 0 !important;
+}
+
+#groupOptions .a-group {
+    margin-left: 15px;
+}

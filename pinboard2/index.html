@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>PinBoard</title>
+</head>
+<body>
+
+    <link rel="stylesheet" href="css/pinboard/style.css">
+    <div class="loader loader-default" data-blink></div>
+    <div id="pinboard">
+
+
+        <div id="canvas-container">
+            <canvas id="c"></canvas>
+        </div>
+
+        <div class="bar" id="pb_header">
+            <div>
+                <!-- <a href="#"><img src="css/pinboard/images/logo.png" alt="PinWin"> 15</a> -->
+                <a href="#">PinBoard</a>
+                <a href="#">Contests</a>
+                <a href="#" data-responsive="tablet">News</a>
+                <a href="#" data-responsive="tablet">Members</a>
+                <a href="#">Gallery</a>
+                <a href="#">Cabinet</a>
+            </div>
+            <div>
+                <a href="#" onclick="pinboard.switch(listBar)">
+                    <i class="material-icons">apps</i>
+                    <span data-responsive="tablet">My collages</span>
+                </a>
+
+                <div class="dropdown" id="boardSettings">
+                    <span>New collage</span><i class="material-icons">expand_more</i>
+                    <div class="bar dropdown-content">
+                        <span>Collage name:</span>
+                        <input id="boardNameInput" type="text" placeholder='New collage'>
+                        <a href="#"><i class="material-icons-outlined">save</i> Save</a>
+                        <a onclick="canvas.exportToPng()"><i class="material-icons">save_alt</i> Download</a>                    
+                    </div>
+                </div>
+                <span id="toolbar_label">
+                    <a onclick="pinboard.show(toolbar)"><i class="material-icons" data-responsive="only_portrait">add</i></a>
+                    <nav data-responsive="not_portrait">
+                        <a onclick="pinboard.show(toolbar); document.getElementById('hub_products').click()"><i class="material-icons-outlined">weekend</i></a>
+                        <a onclick="pinboard.show(toolbar); document.getElementById('hub_images').click()"><i class="material-icons-outlined">insert_photo</i></a>
+                        <a onclick="pinboard.show(toolbar); document.getElementById('hub_text').click()"><i class="material-icons-outlined">text_fields</i></a>
+                        <a onclick="pinboard.show(toolbar); document.getElementById('hub_colors').click()"><i class="material-icons-outlined">palette</i></a>
+                    </nav>
+                </span>
+                <!-- <button id="toolbar_label_first" onclick="toolbar_label_first.show()"><i class="material-icons">add</i> Добавить <span data-responsive="not_portrait">первый слой</span></button> -->
+                <a onclick="pinboard.switch(thumbsBar)">Layers</a>
+            </div>
+        </div>
+
+
+
+        <div class="bar" id="thumbsBar">
+            <div><a onclick="pinboard.switch(thumbsBar);">>></a></div>
+            <div id="thumbBar">&times;</div>
+            <div id="thumbs"></div>
+            <div id="trash"><a onclick="trash.delete_active_pin()"><i class="material-icons-outlined">delete_forever</i></a></div>
+        </div>
+        <div class="bar" id="canvasBar">
+            <a onclick="canvas.scale('down')" title="Уменьшить масштаб"><i class="material-icons">zoom_out</i></a>
+            <a id="currentZoom" onclick="canvas.setOriginalPosition()">100%</a>
+            <a onclick="canvas.scale('up')" title="Увеличить масштаб"><i class="material-icons">zoom_in</i></a>        
+        </div>
+        <div class="bar hidden" id="pinBar">
+
+            <div class="dropdown">
+                <i class="material-icons-outlined">layers</i> <span data-responsive="tablet">Layer</span>
+                <div class="bar dropdown-content">
+                    <a onclick="pinBar.bringToFront()" title="На самый верх"><i class="material-icons">flip_to_front</i> To the top</a>
+                    <a onclick="pinBar.bringForward()" title="На слой выше"><i class="material-icons">vertical_align_top</i> Above layer</a>
+                    <a onclick="pinBar.sendBackwards()" title="На слой ниже"><i class="material-icons">vertical_align_bottom</i> Lower on layer</a>
+                    <a onclick="pinBar.sendToBack()" title="На самый низ"><i class="material-icons">flip_to_back</i> To the bottom</a>
+                    <a onclick="pinBar.duplicate()" title="Дублировать"><i class="material-icons">filter_none</i> Duplicate</a>
+                    <a id="pinFlipX" title="Отразить горизонтально"><i class="material-icons">flip</i> Flip X</a>
+                    <a id="pinFlipY" title="Отразить вертикально"><i class="material-icons rotated">flip</i> Flip Y</a>    
+                    <a onclick="pinBar.reset()" title="Вернуть исходный поворот и размер"><i class="material-icons">rotate_90_degrees_ccw</i> To the original</a>
+                    <a onclick="canvas.deleteSelectedObject()" title="Удалить"><i class="material-icons-outlined">delete_forever</i> Delete</a>
+                </div>
+            </div>
+
+            <div id="commonOptions">
+                <div class="dropdown">
+                    <i class="material-icons-outlined">tonality</i> <span data-responsive="tablet">Transparency</span>
+                    <div class="bar dropdown-content">
+                        <input type="range" id="pinOpacity" min="0" max="100" value="0" oninput="pinBar.opacity()">
+                    </div>
+                </div>
+                <div class="dropdown">
+                    <i class="material-icons-outlined shadow">lens</i> <span data-responsive="tablet">Shadow</span>
+                    <div class="bar dropdown-content">
+                        <label>Shift X:</label>
+                        <input type="number" id="shadow_x" min="0" max="100" value="0" onchange="pinBar.shadow()">
+                        <label>Shift Y:</label>
+                        <input type="number" id="shadow_y" min="0" max="100" value="0" onchange="pinBar.shadow()">
+                        <label>Blur:</label>
+                        <input type="number" id="shadow_blur" min="0" max="100" value="0" onchange="pinBar.shadow()">
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="dropdown" id="maskOptions">
+                <i class="material-icons-outlined">brightness_2</i> <span data-responsive="tablet">Mask</span>
+                <div class="bar dropdown-content dd-center">
+                    <div class="mask_grid">
+                        <a title="Закругленная" onclick="pinBar.mask('rounded')"><i class="material-icons">crop_din</i></a>
+                        <a title="Добавить круглую маску" onclick="pinBar.mask('circle')"><i class="material-icons">panorama_fish_eye</i></a>
+                        <a onclick="pinBar.mask('star')"><i class="material-icons">star_border</i></a>
+                        <a title="Добавить маску-кляксу" onclick="pinBar.mask('splash')"><object data="./css/pinboard/images/splash_prev.png"></object></a>
+                        <a onclick="pinBar.mask('bookmark')"><object data="./css/pinboard/images/bookmark_prev.png"></object></a>
+                        <a onclick="pinBar.mask('splash2')"><object data="./css/pinboard/images/splash2_prev.png"></object></a>         
+                        <a onclick="pinBar.mask('splash3')"><object data="./css/pinboard/images/splash3_prev.png"></object></a>
+                        <a onclick="pinBar.mask('splash4')"><object data="./css/pinboard/images/splash4_prev.png"></object></a>
+                        <a onclick="pinBar.mask('splash5')"><object data="./css/pinboard/images/splash5_prev.png"></object></a>
+                    </div>
+                    <a title="Убрать маску" onclick="pinBar.mask('none')">Remove mask</a>
+                </div>
+            </div>
+
+            <div id="textOptions">
+                <div class="dropdown">
+                    <i class="material-icons-outlined">text_format</i> <span data-responsive="tablet">Font</span>
+                    <div class="bar dropdown-content dd-right">
+                        <select id="textOptionsFamily">
+                            <option style="font-family: Arial">Arial</option>
+                            <option style="font-family: Tahoma">Tahoma</option>
+                            <option style="font-family: Times New Roman">Times New Roman</option>
+                            <option style="font-family: Playfair Display">Playfair Display</option>
+                            <option style="font-family: Roboto">Roboto</option>
+                            <option style="font-family: Old Standard TT">Old Standard TT</option>
+                            <option style="font-family: Merriweather">Merriweather</option>
+                            <option style="font-family: Cormorant Garamond">Cormorant Garamond</option>
+                            <option style="font-family: Lobster">Lobster</option>
+                            <option style="font-family: Fira Sans">Fira Sans</option>
+                        </select>
+                        <div class="btn-group">
+                            <button id="textOptionsBold"><i class="material-icons">format_bold</i></button>
+                            <button id="textOptionsItalic"><i class="material-icons">format_italic</i></button>
+                            <button id="textOptionsUnderline"><i class="material-icons">format_underlined</i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="dropdown">
+                    <input class="color-shape" id="textOptionsColorBg" disabled> <span data-responsive="tablet">Color</span>
+                    <div class="bar dropdown-content dd-right">
+                        <div id="colorpicker"></div>
+                        <input class="color-value" type="text" id="textOptionsColor" disabled>
+                        <button onclick='pinBar.colorPicker(event, textOptionsColorBg, textOptionsColor)'><i class="material-icons">colorize</i> Pipette</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="dropdown" id="imgOptions">
+                <i class="material-icons-outlined">wb_sunny</i> <span data-responsive="tablet">Filters</span>
+                <div class="bar dropdown-content">
+                    <p>Remove white: </p>
+                    <input type="range" id="pin_distance" min="0" max="100" value="0" oninput="pinBar.white()">
+                </div>
+            </div>
+            <div class="dropdown" id="shapeOptions">
+                <input class="color-shape" id="shapeOptionsColorBg" disabled> <span data-responsive="tablet">Color</span>
+                <div class="bar dropdown-content dd-right">
+                    <div id="colorpicker2"></div>
+                    <input class="color-value" type="text" id="shapeOptionsColor" disabled>
+                    <button onclick='pinBar.colorPicker(event, shapeOptionsColorBg, shapeOptionsColor)'><i class="material-icons">colorize</i> Pipette</button>
+                </div>
+            </div>
+
+            <div id="groupOptions">
+                <button id="groupOptions_group" onclick="pinBar.group()" title="Сгруппировать">Group</button>
+                <button id="groupOptions_ungroup" onclick="pinBar.ungroup()" title="Разгруппировать">Ungroup</button>
+                <div class="a-group">
+                    <span data-responsive="tablet">Align axis:</span>
+                    <button id="alignCenterX" onclick="pinBar.alignCenterX()">
+                    <i class="material-icons rotated">vertical_align_center</i> Y</button>
+                    <button id="alignCenterY" onclick="pinBar.alignCenterY()">
+                    <i class="material-icons">vertical_align_center</i> X 
+                    </button>
+                </div>
+            </div>
+    
+
+
+
+        </div>
+
+
+
+<!------------------------------------------------------------ Toolbar ---------------------------------------------------------------------->
+        <div class="bar hidden" id="toolbar">
+
+            <!-- Hubs -->
+            <div id="hubs">
+                <button class="hub" onclick="hubs.open(event, 'Products')" id="hub_products"><i class="material-icons-outlined">weekend</i></button>
+                <button class="hub" onclick="hubs.open(event, 'Images')" id="hub_images"><i class="material-icons-outlined">insert_photo</i></button>
+                <button class="hub" onclick="hubs.open(event, 'Text')" id="hub_text"><i class="material-icons-outlined">text_fields</i></button>
+                <button class="hub" onclick="hubs.open(event, 'Colors')" id="hub_colors"><i class="material-icons-outlined">palette</i></button>
+            </div>
+
+            <!-- Path -->
+            <div id="path">
+                <h3 onclick="path.back()"></h3>
+                <span onclick="path.top()"></span>
+            </div>
+
+            <!-- Gallery -->
+            <div class="gallery" id="Products">
+                <p>Item search</p>
+            </div>
+            <div class="gallery" id="Images">
+                <div class="list">
+                    <a onclick="show_gallery('Load_images')">Load</a>
+                    <a onclick="show_gallery('My_albums')">My albums</a>
+                    <a onclick="show_gallery('Pixabay'); getPixabay(`furniture`)">Pixabay</a>
+                    <!-- <a onclick="show_gallery('Harvard'); getHarvard()" title="Гарвардский художественный музей" data-info>Harvard Art Museum</a> -->
+                    <!-- <a onclick="show_gallery('Amsterdam'); getAmsterdam()" title="художественный музей в Амстердаме" data-info>Rijksmuseum</a> -->
+                    <!-- <a onclick="show_gallery('Iconfinder'); getIconfinder()">Iconfinder</a> -->
+                    <input type="checkbox" class="dd" id="Elements_more"/><label class="dd" for="Elements_more">Elements <i class="material-icons">expand_more</i></label>
+                    <div>
+                        <a onclick="show_gallery('Artdeco'); getElements('artdeco', 'Artdeco')">Art Deco</a>
+                        <a onclick="show_gallery('Bg'); getElements('bg', 'Bg')">Backgrounds</a>
+                        <!-- <a onclick="show_gallery('Borders'); getElements('borders', 'Borders')">Рамки</a> -->
+                        <a onclick="show_gallery('Splashes'); getElements('splashes', 'Splashes')">Blots</a>
+                        <a onclick="show_gallery('Corners'); getElements('corners', 'Corners')">Corners</a>
+                        <a onclick="show_gallery('Various'); getElements('elements', 'Various')">Various</a>
+                        <a onclick="show_gallery('LeavesFlowers'); getElements('leaves_flowers', 'LeavesFlowers')">Leaves & flowers</a>
+                        <a onclick="show_gallery('LinesArrows'); getElements('lines_arrows', 'LinesArrows')">Lines & arrows</a>
+                        <!-- <a onclick="show_gallery('Music'); getElements('music', 'Music')">Музыка</a>
+                        <a onclick="show_gallery('Ornaments'); getElements('ornaments', 'Ornaments')">Орнаменты</a>
+                        <a onclick="show_gallery('Rooms'); getElements('rooms', 'Rooms')">Комнаты</a>
+                        <a onclick="show_gallery('Textures'); getElements('textures', 'Textures')">Текстуры</a>
+                        <a onclick="show_gallery('Transport'); getElements('transport', 'Transport')">Транспорт</a>
+                        <a onclick="show_gallery('Typography'); getElements('typography', 'Typography')">Типография</a>
+                        <a onclick="show_gallery('Water'); getElements('water', 'Water')">Вода</a>
+                        <a onclick="show_gallery('Zoo'); getElements('zoo', 'Zoo')">Животные</a>
+                        <a onclick="show_gallery('Gradients'); getElements('gradients', 'Gradients')">Градиенты</a> -->
+                    </div>
+                </div>
+                <div class="content">
+                    <div id="Load_images">
+                        <h4><i class="material-icons-outlined">how_to_vote</i> From device disk:</h4>
+                        <input id="fileInput" type="file" onchange="processFiles(this.files)" multiple>
+                        <button class="primary" onclick="showFileInput()">Select pictures</button>
+                        <p class="signote">Downloaded pictures will not be saved in albums and will be deleted after you finish working with a collage.</p>
+                        <h4><i class="material-icons">link</i> Link:</h4>
+                        <input type="text" id="linkToLoadImg" placeholder="Введите ссылку"><button class="primary" onclick="linkToLoadImg.upload()">Download</button>
+                        <div class="grid" id="fileOutput"></div>
+                    </div>
+                    <div id="My_albums">Album list</div>
+                    <div id="Pixabay">
+                        <input id="pixabay_query" type="text" placeholder='Enter a query'>
+                        <a onclick="getPixabay(pixabay_query.value)"><i class="material-icons-outlined">search</i></a>
+                        <div class="grid"></div>
+                    </div>
+                    <div id="Amsterdam"><div class="grid"></div></div>
+                    <div id="Iconfinder"><div class="grid"></div></div>
+                    <div id="Artdeco"><div class="grid"></div></div>
+                    <div id="Bg"><div class="grid"></div></div>
+                    <div id="Borders"><div class="grid"></div></div>
+                    <div id="Splashes"><div class="grid"></div></div>
+                    <div id="Corners"><div class="grid"></div></div>
+                    <div id="Various"><div class="grid"></div></div>
+                    <div id="LeavesFlowers"><div class="grid"></div></div>
+                    <div id="LinesArrows"><div class="grid"></div></div>
+                    <div id="Music"><div class="grid"></div></div>
+                    <div id="Ornaments"><div class="grid"></div></div>
+                    <div id="Rooms"><div class="grid"></div></div>
+                    <div id="Textures"><div class="grid"></div></div>
+                    <div id="Transport"><div class="grid"></div></div>
+                    <div id="Typography"><div class="grid"></div></div>
+                    <div id="Water"><div class="grid"></div></div>
+                    <div id="Zoo"><div class="grid"></div></div>
+                    <div id="Gradients"><div class="grid"></div></div>
+                </div>
+            </div>
+            <div class="gallery" id="Text">
+                <div class="list">
+                    <button onclick="hubs.text('Arial', '#006bff');">Arial</button>
+                    <button style="font-family: Tahoma" onclick="hubs.text('Tahoma', '#006bff');">Tahoma</button>
+                    <button style="font-family: Times New Roman" onclick="hubs.text('Times New Roman', '#006bff');">Times New Roman</button>
+                    <button style="font-family: Playfair Display" onclick="hubs.text('Playfair Display', '#006bff');">Playfair Display</button>
+                    <button style="font-family: Roboto" onclick="hubs.text('Roboto', '#006bff');">Roboto</button>
+                    <button style="font-family: Old Standard TT" onclick="hubs.text('Old Standard TT', '#006bff');">Old Standard TT</button>
+                    <button style="font-family: Merriweather" onclick="hubs.text('Merriweather', '#006bff');">Merriweather</button>
+                    <button style="font-family: Cormorant Garamond" onclick="hubs.text('Cormorant Garamond', '#006bff');">Cormorant Garamond</button>
+                    <button style="font-family: Lobster" onclick="hubs.text('Lobster', '#006bff');">Lobster</button>
+                    <button style="font-family: Fira Sans" onclick="hubs.text('Fira Sans', '#006bff');">Fira Sans</button>
+                </div>
+                <div class="content"></div>
+            </div>
+            <div class="gallery" id="Colors">
+                <div class="list">
+                    <a onclick="show_gallery('ColorsTop'); getColors(`top`, 'ColorsTop')">Most popular</a>
+                    <a onclick="show_gallery('ColorsNew'); getColors(`new`, 'ColorsNew')">New colors</a>
+                    <a onclick="show_gallery('ColorsRandom'); getColors(`random`, 'ColorsRandom')">Random color</a>
+                    <span class="signote">Colors provided by <b><a href="http://colourlovers.com" target="_blank">ColourLovers.com</a></b></span>
+                </div>
+                <div class="content">
+                    <div id="ColorsTop"><div class="grid"></div></div>
+                    <div id="ColorsNew"><div class="grid"></div></div>
+                    <div id="ColorsRandom"><div class="grid"></div></div>
+                </div>
+            </div>
+        </div>
+<!------------------------------------------------------------ Toolbar ---------------------------------------------------------------------->
+       
+
+
+        <div class="bar hidden" id="listBar">
+            <div>
+                <a class="accent" onclick="pinboard.switch(listBar)"><i class="material-icons">close</i> My collages</a>
+            </div>
+        </div>
+
+
+
+        <div id="c_picker_block">
+            <div id="c_picker"></div>
+        </div>
+
+
+
+    </div>
+    
+    
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <!-- <script src="js/pinboard/fabric.min.js"></script> -->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/fabric.js/3.0.0/fabric.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <script src="http://hammerjs.github.io/dist/hammer.min.js"></script>
+    <script src="js/pinboard/nprogress.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="js/pinboard/farbtastic.js"></script>
+    <script src="js/pinboard/main.js"></script>
+    <script src="js/pinboard/canvas.js"></script>
+    <script src="js/pinboard/pins.js"></script>
+    <script src="js/pinboard/thumbs.js"></script>
+    <script src="js/pinboard/toolbar.js"></script>
+    <script src="js/pinboard/server.js"></script>
+</body>
+</html>

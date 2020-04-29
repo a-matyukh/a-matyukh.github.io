@@ -1,0 +1,20 @@
+
+/* canvasBar */
+
+#canvasBar {
+    left: calc(var(--cell)/3);
+    bottom: calc(var(--cell)/3);
+    padding: calc(var(--cell)/3);
+    border-radius: 5px;
+    box-shadow: var(--shadow);
+}
+
+#canvasBar a:not(:last-child) {
+    margin-right: 15px;
+}
+
+#currentZoom {
+    display: inline-block;
+    text-align: center;
+    width: var(--cell);
+}

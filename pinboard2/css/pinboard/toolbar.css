@@ -1,0 +1,219 @@
+/* ------------------------------ Toolbar label ------------------------------ */
+
+#toolbar_label {
+    position: absolute;
+    right: calc(var(--cell)*2.5);
+}
+
+#toolbar_label a {    
+    color: #006bff;
+}
+
+#toolbar_label a:hover {
+    color: #333333;
+}
+
+#toolbar_label_first {
+    position: absolute;
+    z-index: 1;
+    top: calc(var(--cell)*1.3);
+    right: 10px;
+    padding: calc(var(--cell)/5);
+    width: 200px;
+    border: 0;
+    border-radius: 20px;
+    color: white;
+    background: #006bff;
+}
+
+#toolbar_label_first:hover {
+    opacity: 1;
+    background: #ff9400;
+}
+
+/* ------------------------------------------------------------ Toolbar ------------------------------------------------------------ */
+
+#toolbar {
+    top: calc(var(--cell) + 1px);
+    right: 0;
+    width: 310px;
+    height: calc(100% - var(--cell)*2);
+    overflow: auto;
+    transition: var(--curve);
+    box-shadow: var(--big-shadow);
+    user-select: none;
+}
+
+#toolbar.hidden {
+    right: calc(0px - 100%);
+}
+
+/* ------------------------------ Hubs ------------------------------ */
+
+#hubs {
+    overflow: hidden;
+    background: #ebebeb;
+}
+
+#hubs button {
+    background: inherit;
+    color: #666666;
+    float: left;
+    border: none;
+    outline: none;
+    padding: 9px 16px;
+    border-radius: 0;
+    transition: var(--curve);
+}
+
+#hubs button:hover {
+    background: #ddd;
+    color: #333333;
+}
+
+#hubs button.active {
+    background: white;
+    color: #006bff;
+}
+
+
+/* ------------------------------ Path ------------------------------ */
+
+#path {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    padding: 0 15px;
+    background: white;
+    border-bottom: var(--border);
+}
+
+#path *:hover {
+    color: #006bff;
+    cursor: pointer;
+}
+
+#path h3 {
+    display: inline-block;
+}
+
+#path > span {
+    margin-left: 15px;
+}
+
+#path > span:not(:empty):before {
+    position: relative;
+    right: 10px;
+    content: "/";
+    opacity: .4;
+}
+
+/* ------------------------------ Gallery ------------------------------ */
+
+.gallery {
+    display: none;
+    padding: 15px;
+}
+
+/* ---------- List ---------- */
+
+.list > * {
+    display: block;
+    padding: 10px 0 20px;
+}
+
+.list div > a {
+    display: block;
+    margin: 10px 0 20px;
+}
+
+.list > div {
+    padding: 0 20px 10px;
+}
+
+/* Load images */
+
+#fileInput {
+	display: none;
+}
+
+#toolbar .content h4:first-of-type {
+    margin-top: 10px;
+}
+
+#toolbar .content h4 {
+    margin-bottom: 10px;
+}
+
+#Load_images input {
+    width: 135px;
+    margin-right: 10px;
+}
+
+#Load_images .grid {
+    margin-top: 15px;
+    padding-top: 15px;
+    margin-bottom: 15px;
+    border-top: var(--border);
+}
+
+/* Elements */
+
+.dd { display: none; }
+.dd:not(:checked) + label + * { display: none; }
+
+.dd:not(:checked) + label,
+.dd:checked + label {
+    display: inline-block;
+    padding: 5px 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background: #f7f7f7;
+    cursor: pointer;
+}
+.dd:checked + label {
+    background: #f3f3f3;
+    color: #666666;
+}
+
+/* Pixabay */
+
+#pixabay_query {
+    margin-bottom: 15px;
+}
+
+
+/* Text */
+
+#Text button {
+    width: 100%;
+    padding: 20px 0;
+    color: black;
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+/* ---------- Content ---------- */
+
+.content {
+    display: none;
+}
+
+.content > div {
+    display: none;
+}
+
+/* Grid */
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 80px);
+    grid-gap: 10px;
+    grid-auto-rows: 10px;
+    grid-auto-flow: row dense;
+    position: relative;
+}
+  
+.grid img {
+    width: 80px;
+}

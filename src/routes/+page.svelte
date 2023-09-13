@@ -1,3 +1,8 @@
-<h1>!!!</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
-<a href="/2">dfdf</a>dfdf
+<nav>
+    <a href="/concepts">concepts</a>
+    <a href="/experiments">experiments</a>
+    <a href="/articles">articles</a>
+</nav>
+<div>
+    main page
+</div>

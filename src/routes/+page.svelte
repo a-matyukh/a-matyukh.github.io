@@ -1,9 +1,6 @@
 <div>
     <h3>Concepts</h3>
     <div>
-        <a href="/pile-commander" target="_blank">Pile Commander</a>
-    </div>
-    <div>
         <a href="https://supatupacommander.web.app/" target="_blank">SupatupaCommander</a>
     </div>
     <div>
